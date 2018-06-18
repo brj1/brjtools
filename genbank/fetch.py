@@ -33,6 +33,7 @@ print(str(count) + ' records found')
 efetch_url += "&query_key={}&WebEnv={}".format(key, web)
 
 outfile = open(outfile, "w")
+outfile.write("<xml>")
 retstart = 0
 while retstart < count:
     print("Fetching records {} through {}".format(retstart, retstart+retmax))
@@ -42,4 +43,4 @@ while retstart < count:
     retstart += retmax
     outfile.flush()
     time.sleep(10)
-
+outfile.write("</xml>")
