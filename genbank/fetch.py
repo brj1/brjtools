@@ -23,7 +23,9 @@ efetch_params = "&rettype=gb&retmode=xml&retmax={}".format(retmax)
 esearch_url = base_url + "esearch.fcgi?" + params + esearch_params
 efetch_url = base_url + "efetch.fcgi?" + params + efetch_params
 
-soup = BeautifulSoup(urlopen(esearch_url + "&term={}".format(query)))
+print(esearch_url + "&term={}".format(query))
+
+soup = BeautifulSoup(urlopen(esearch_url + "&term={}".format(query)), 'html.parser')
 count = int(soup.count.text)
 web = soup.webenv.text
 key = soup.querykey.text
@@ -37,7 +39,7 @@ outfile.write("<xml>")
 retstart = 0
 while retstart < count:
     print("Fetching records {} through {}".format(retstart, retstart+retmax))
-    soup = BeautifulSoup(urlopen(efetch_url + "&retstart={}".format(retstart)))
+    soup = BeautifulSoup(urlopen(efetch_url + "&retstart={}".format(retstart)), 'html.parser')
     for record in soup.find_all("gbseq"):
         outfile.write(record.prettify())
     retstart += retmax

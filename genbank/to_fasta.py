@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 # Read through all the XML files fetched from Genbank, filtering out
-# only those with a year, and write them in FASTA format. Help from
+# only those with specified qualifiers, and write them in FASTA format. Help from
 # here:
 # http://boscoh.com/programming/reading-xml-serially.html
 
