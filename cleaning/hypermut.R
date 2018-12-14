@@ -7,7 +7,7 @@ get.pot.mut <- function(ref, seq) {
 	
 	which(
 		seq[2:(l-1)] %in% c('a', 'g') &
-			seq[3:l] %in% c('a', 'g', 't') &
+			seq[3:l] != 'c' &
 			ref[1:(l-2)] == 'g'
 	)
 }
@@ -35,6 +35,9 @@ check.hyper <- function(ref, seq) {
 		)
 	)
 	
+	if (verbose)
+		cat(mut, length(pot.mut), ctrl, length(pot.ctrl), '\n')
+	
 	fisher.test(m, alternative='greater')$p.value
 }
 
@@ -52,7 +55,7 @@ hyper.fasta.file <- args$hyperfasta
 make.consensus <- args$makeconsensus
 verbose <- args$verbose
 
-f <- read.fasta(fasta.file)
+f <- lapply(read.fasta(fasta.file), tolower)
 
 if (make.consensus) {
 	ref <- consensus(do.call(rbind, f))
@@ -61,15 +64,15 @@ if (make.consensus) {
 	f <- f[-1]
 }
 
-p.val <- sapply(f, check.hyper, ref=ref)
+p.value <- lapply(f, check.hyper, ref=ref)
 
 if (verbose)
-	print(p.val)
+	print(data.frame(row.names=names(p.value), p.value=unlist(p.value)))
 
-f.clean <- f[p.val >= 0.05] 
+f.clean <- f[p.value >= 0.05] 
 write.fasta(f.clean, names(f.clean), clean.fasta.file)
 
 if (!is.na(hyper.fasta.file)) {
-	f.hyper <- f[p.val < 0.05]
+	f.hyper <- f[p.value < 0.05]
 	write.fasta(f.hyper, names(f.hyper), hyper.fasta.file)
 }
