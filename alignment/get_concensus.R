@@ -1,4 +1,5 @@
 #!/usr/bin/Rscript
+library(seqinr)
 
 get.mode <- function(x, dup=NA) {
   tab <- table(x)
@@ -12,7 +13,7 @@ get.mode <- function(x, dup=NA) {
 args <- commandArgs(trailingOnly = T)
 
 fasta.file <- args[1]
-fasta.conensus.file <- args[2]
+fasta.concensus.file <- args[2]
 
 f <- read.fasta(fasta.file)
 df <- do.call(rbind, f)

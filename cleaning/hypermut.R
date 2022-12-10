@@ -156,7 +156,7 @@ if (make.consensus) {
 	ref <- consensus(do.call(rbind, f))
 } else {
 	suppressWarnings(ref.num <- as.integer(ref.name))
-	if (!is.na(ref.num) && ref.num < names(f) && ref.num > 0) {
+	if (!is.na(ref.num) && ref.num <= length(names(f)) && ref.num > 0) {
 		names(f)[ref.num] <- ref.name
 	}
 	
