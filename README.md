@@ -1,3 +1,3 @@
-# bjtools: Bioinformatics j Tools
+# brjtools
 
 scripts for bioinformatics stuff
