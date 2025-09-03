@@ -2,7 +2,7 @@ library(seqinr)
 library(optparse)
 
 #implementation of Hypermut (https://www.hiv.lanl.gov/content/sequence/HYPERMUT/hypermut.html)
-get.pot.mut <- function(ref, seq) {
+get.pot.mut.nuc <- function(ref, seq) {
 	l <- length(seq)
 	
 	which(
@@ -12,7 +12,7 @@ get.pot.mut <- function(ref, seq) {
 	)
 }
 
-get.pot.ctrl <- function(ref, seq) {
+get.pot.ctrl.nuc <- function(ref, seq) {
 	l <- length(seq)
 	
 	which(
@@ -21,6 +21,29 @@ get.pot.ctrl <- function(ref, seq) {
 			ref[1:(l-2)] == 'g'
 	)
 }
+
+get.pot.mut.iupac <- function(ref, seq) {
+  l <- length(seq)
+  
+  which(
+    (seq[2:(l-1)] %in% c('a', 'g') | seq[2:(l-1)] == 'r') &
+      seq[3:l] != 'c' &
+      ref[1:(l-2)] == 'g'
+  )
+}
+
+get.pot.ctrl.iupac <- function(ref, seq) {
+  l <- length(seq)
+  
+  which(
+    (((seq[2:(l-1)] %in% c('a', 'g') | seq[2:(l-1)] == 'r') & seq[3:l] == 'c') |
+       (seq[2:(l-1)] %in% c('c', 't') | seq[2:(l-1)] == 'y')) &
+      ref[1:(l-2)] == 'g'
+  )
+}
+
+get.pot.mut <- get.pot.mut.iupac
+get.pot.ctrl <- get.pot.ctrl.iupac
 
 check.hyper <- function(ref, seq) {
 	pot.mut <- get.pot.mut(ref, seq)

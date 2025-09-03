@@ -1,5 +1,7 @@
 #!/usr/bin/Rscript
 library(seqinr)
+library(optparse)
+library(dplyr)
 
 get.mode <- function(x, dup=NA) {
   tab <- table(x)
@@ -10,13 +12,16 @@ get.mode <- function(x, dup=NA) {
     names(tab)[tab == m]
 }
 
-args <- commandArgs(trailingOnly = T)
+args <- OptionParser() %>%
+  add_option("--name", default = "CONCENSUS") %>%
+  parse_args2()
 
-fasta.file <- args[1]
-fasta.concensus.file <- args[2]
+fasta.file <- args$args[1]
+fasta.concensus.file <- args$args[2]
+name <- args$options$name
 
 f <- read.fasta(fasta.file)
 df <- do.call(rbind, f)
 cons <- list(apply(df, 2, get.mode, '-'))
 
-write.fasta(cons, "CONCENSUS", fasta.concensus.file)
+write.fasta(cons, name, fasta.concensus.file)
